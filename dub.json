@@ -1,0 +1,28 @@
+{
+    "name": "tensorformats",
+    "description": "A parser for different tensor file formats",
+    "authors": ["Tim Schendekehl"],
+    "license": "BSL-1.0",
+    "targetType": "library",
+    "configurations": [
+        {
+            "name": "library",
+        },
+        {
+            "name": "unittest",
+            "sourcePaths": ["src", "tests"]
+        }
+    ],
+    "subPackages": [
+        {
+            "name": "dumptensors",
+            "targetType": "executable",
+            "sourceFiles": ["examples/dumptensors.d"]
+        },
+        {
+            "name": "dumppickle",
+            "targetType": "executable",
+            "sourceFiles": ["examples/dumppickle.d"]
+        }
+    ]
+}

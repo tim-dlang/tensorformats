@@ -1,0 +1,49 @@
+name: TensorFormats tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        platform: [ linux64, win64, win32 ]
+        dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
+
+#        exclude:
+#          - { platform: win32, dc: ldc-latest }
+#          - { platform: win64, dc: dmd-2.100.0 }
+
+        include:
+          - platform: linux64
+            os: ubuntu-24.04
+            arch: x86_64
+
+          - platform: win64
+            os: windows-2022
+            arch: x86_64
+
+          - platform: win32
+            os: windows-2022
+            arch: x86
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dlang-community/setup-dlang@4c99aa991ce7d19dd3064de0a4f2f6b2f152e2d7
+
+    - name: 'Build & Test'
+      run: |
+        dub build --compiler=${{ env.DC }} --arch=${{ matrix.arch }}
+        dub test --compiler=${{ env.DC }} --arch=${{ matrix.arch }}
+        dub build :dumptensors --compiler=${{ env.DC }} --arch=${{ matrix.arch }}
+        dub build :dumppickle --compiler=${{ env.DC }} --arch=${{ matrix.arch }}
